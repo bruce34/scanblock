@@ -19,7 +19,7 @@ func (sb *ScanBlock) block(w http.ResponseWriter, r *http.Request) {
 
 	// If we are not playing any games, reply with a plain error message.
 	if !sb.config.PlayGames {
-		http.Error(w, "blocked by scanblock", http.StatusTooManyRequests)
+		http.Error(w, "", http.StatusTooManyRequests)
 		return
 	}
 

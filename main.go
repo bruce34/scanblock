@@ -45,6 +45,10 @@ type Config struct {
 	// RememberSeconds defines for how many seconds information about an IP
 	// should be cached after it was last seen.
 	RememberSeconds int
+
+	// HTTP status codes to block, listed as start->end pair, e.g. the 400,499 for 400->499 inclusive
+	BlockStatusCodeStart int
+	BlockStatusCodeEnd   int
 }
 
 // CreateConfig creates the default plugin configuration.
@@ -74,6 +78,10 @@ func New(ctx context.Context, next http.Handler, config *Config, name string) (h
 	}
 	if config.RememberSeconds == 0 {
 		config.RememberSeconds = DefaultRememberSeconds
+	}
+	if config.BlockStatusCodeStart == 0 || config.BlockStatusCodeEnd == 0 {
+		config.BlockStatusCodeStart = 400
+		config.BlockStatusCodeEnd = 499
 	}
 
 	// Log the instantiation of the plugin, including configuration.
@@ -112,8 +120,10 @@ func (sb *ScanBlock) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	// If we receive an entry, we may continue with the request, but need to wrap
 	// the response writer in order to record the status code.
 	wrappedResponseWriter := &ResponseWriter{
-		ResponseWriter: w,
-		cacheEntry:     entry,
+		ResponseWriter:       w,
+		cacheEntry:           entry,
+		BlockStatusCodeStart: sb.config.BlockStatusCodeStart,
+		BlockStatusCodeEnd:   sb.config.BlockStatusCodeEnd,
 	}
 
 	// Continue with next handler.

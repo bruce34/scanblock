@@ -1,6 +1,6 @@
 # Scan Block Traefik Plugin
 
-Traefik plugin that blocks scanner IPs by counting 4xx status codes until a limit is hit.
+Traefik plugin that blocks scanner IPs by counting, by default, 4xx status codes until a limit is hit.
 
 Can also play games with scanners.
 
@@ -33,4 +33,8 @@ BlockSeconds int
 // RememberSeconds defines for how many seconds information about an IP
 // should be cached after it was last seen.
 RememberSeconds int
+
+// HTTP status codes to block, listed as start->end pair, e.g. the 400,499 for 400->499 inclusive
+BlockStatusCodeStart int
+BlockStatusCodeEnd   int
 ```

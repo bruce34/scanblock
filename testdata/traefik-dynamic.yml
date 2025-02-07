@@ -10,3 +10,5 @@ http:
           playGames: false
           blockSeconds: 5
           rememberSeconds: 10
+          blockStatusCodeStart: 401
+          blockStatusCodeEnd: 401

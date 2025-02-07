@@ -2,7 +2,7 @@ version: '3'
 
 services:
   traefik:
-    image: traefik:v2.9
+    image: traefik:v3.3.3
     command:
       # Enable Traefik UI on port 8080
       - "--api.insecure=true"
@@ -20,14 +20,14 @@ services:
       # Define entrypoints.
       - "--entrypoints.http.address=:80"
       # Add plugin.
-      - "--experimental.localplugins.scanblock.modulename=github.com/safing/scanblock"
+      - "--experimental.localplugins.scanblock.modulename=github.com/bruce34/scanblock"
     ports:
       - "80:80"
       - "8000:8080"
     volumes:
       - ./traefik-dynamic.yml:/conf/traefik-dynamic.yml
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - ..:/plugins-local/src/github.com/safing/scanblock
+      - ..:/plugins-local/src/github.com/bruce34/scanblock
 
   whoami:
     image: traefik/whoami
